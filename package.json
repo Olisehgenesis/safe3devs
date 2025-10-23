@@ -1,7 +1,8 @@
 {
-  "name": "@safe3devs/safedeploy",
+  "name": "safe3devs-qr-deploy",
   "version": "1.0.0",
-  "description": "Universal Safe3Devs QR Deploy SDK for TypeScript and JavaScript with ethers.js and viem support",
+  "type": "module",
+  "description": "Universal Safe3Devs QR Deploy SDK with Coinbase Smart Wallet support. Deploy contracts using passkey/biometric authentication, ethers.js, viem, and WalletConnect QR signing.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.esm.js",
@@ -16,10 +17,11 @@
     "tests"
   ],
   "scripts": {
-    "build": "npm run build:core && npm run build:ethers && npm run build:viem && npm run build:js && npm run build:plugin",
+    "build": "npm run build:core && npm run build:ethers && npm run build:viem && npm run build:smart-wallet && npm run build:js && npm run build:plugin",
     "build:core": "tsc -p tsconfig.core.json",
     "build:ethers": "tsc -p tsconfig.ethers.json",
     "build:viem": "tsc -p tsconfig.viem.json",
+    "build:smart-wallet": "tsc -p tsconfig.smart-wallet.json",
     "build:js": "rollup -c rollup.config.js",
     "build:plugin": "tsc -p tsconfig.plugin.json",
     "dev": "tsc --watch",
@@ -39,7 +41,17 @@
     "viem",
     "hardhat",
     "typescript",
-    "javascript"
+    "javascript",
+    "smart-wallet",
+    "account-abstraction",
+    "passkey",
+    "biometric",
+    "gasless",
+    "multisig",
+    "coinbase",
+    "safe",
+    "biconomy",
+    "thirdweb"
   ],
   "author": "Safe3Devs",
   "license": "MIT",

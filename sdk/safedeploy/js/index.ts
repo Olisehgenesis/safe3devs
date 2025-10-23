@@ -87,6 +87,8 @@ export function getClientType(client: Safe3Client): ClientType {
 export { Safe3EthersSigner } from '../ethers';
 export { Safe3ViemClient } from '../viem';
 export { Safe3QRDeploy } from '../core';
+export { Safe3SmartWallet, createSmartWalletClient } from '../smart-wallet';
 export type { Safe3Signer, Safe3QRDeployOptions } from '../core';
 export type { Safe3EthersSignerOptions } from '../ethers';
 export type { Safe3ViemClientOptions, DeployContractOptions } from '../viem';
+export type { SmartWalletOptions, SmartWalletDeployOptions } from '../smart-wallet';

@@ -13,7 +13,7 @@ dotenv.config();
  * 1. Connect to wallet via QR code
  * 2. Deploy a simple Greeter contract
  * 3. Interact with the deployed contract
- * 4. Test on Alfajores Celo testnet
+ * 4. Test on Base Mainnet
  */
 
 async function testRealContractDeployment() {
@@ -34,8 +34,8 @@ async function testRealContractDeployment() {
     'mainnet': { chainId: 1, name: 'Ethereum Mainnet' }
   };
 
-  // Default to Alfajores for testing
-  const selectedNetwork = networks.alfajores;
+  // Default to Base Mainnet for testing
+  const selectedNetwork = networks.base;
   
   console.log(`🌐 Testing on: ${selectedNetwork.name} (Chain ID: ${selectedNetwork.chainId})`);
   console.log('');

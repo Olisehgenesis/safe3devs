@@ -1,10 +1,12 @@
 # Safe3Devs QR Deploy SDK
 
-A universal TypeScript/JavaScript SDK for deploying smart contracts using WalletConnect QR code signing. Supports both **ethers.js** and **viem** clients, making it perfect for any Web3 development workflow.
+A universal TypeScript/JavaScript SDK for deploying smart contracts using WalletConnect QR code signing. Supports both **ethers.js** and **viem** clients, plus **Smart Wallets** including **Coinbase Smart Wallet** with passkey/biometric authentication.
 
 ## 🚀 Features
 
 - **Cross-Client Support**: Works with both ethers.js v6 and viem v2
+- **Smart Wallet Integration**: Coinbase Smart Wallet, Safe Multisig, Biconomy Gasless, Thirdweb
+- **Passkey Authentication**: Deploy contracts using biometric/passkey authentication
 - **QR Code Signing**: Deploy contracts using WalletConnect QR code authentication
 - **Hardhat Integration**: Seamless integration with Hardhat development environment
 - **TypeScript First**: Full TypeScript support with comprehensive type definitions
@@ -15,7 +17,7 @@ A universal TypeScript/JavaScript SDK for deploying smart contracts using Wallet
 ## 📦 Installation
 
 ```bash
-npm install @safe3devs/safedeploy
+npm install safe3devs-qr-deploy
 ```
 
 ### Peer Dependencies
@@ -28,6 +30,56 @@ npm install ethers@^6.0.0
 
 # For viem support  
 npm install viem@^2.0.0
+```
+
+## 🔐 Smart Wallet Support
+
+The SDK now supports **Smart Wallets** (Account Abstraction) for enhanced security and user experience:
+
+### **Coinbase Smart Wallet** 🔐
+- **Passkey/Biometric Authentication**: No private keys needed
+- **Gasless Transactions**: Pay with credit card or other methods
+- **Social Recovery**: Easy account recovery options
+
+### **Safe Multisig** 👥
+- **Multi-signature Wallets**: Require multiple approvals
+- **Time-locked Transactions**: Add security delays
+- **Spending Limits**: Control transaction amounts
+
+### **Biconomy** ⛽
+- **Gasless Transactions**: Users don't pay gas fees
+- **Meta Transactions**: Sponsor user transactions
+- **Social Login**: Email/phone authentication
+
+### **Thirdweb** 🔧
+- **Custom Smart Wallets**: Build your own wallet logic
+- **Flexible Authentication**: Any auth method you want
+- **Advanced Features**: Custom recovery, spending rules
+
+## 🚀 Smart Wallet Usage
+
+```typescript
+import { createSmartWalletClient } from 'safe3devs-qr-deploy';
+
+// Coinbase Smart Wallet (Passkey/Biometric)
+const coinbaseWallet = createSmartWalletClient({
+  projectId: 'your-project-id',
+  chainId: 8453, // Base Mainnet
+  smartWalletType: 'coinbase',
+  metadata: {
+    name: 'My DApp',
+    description: 'Deploy contracts with passkey',
+    url: 'https://mydapp.com',
+    icons: ['https://mydapp.com/icon.png']
+  }
+});
+
+await coinbaseWallet.connectWallet(); // Shows QR code + passkey prompt
+const contractAddress = await coinbaseWallet.deployContract({
+  abi: greeterABI,
+  bytecode: greeterBytecode,
+  args: ['Hello Smart Wallet!']
+});
 ```
 
 ## 🔧 Quick Start
@@ -51,7 +103,7 @@ WALLETCONNECT_PROJECT_ID=your_project_id_here
 #### With Ethers.js
 
 ```typescript
-import { createSafe3Client } from '@safe3devs/safedeploy';
+import { createSafe3Client } from 'safe3devs-qr-deploy';
 
 const client = createSafe3Client({
   client: 'ethers',
@@ -73,7 +125,7 @@ const contract = await client.deployContract(factory, 'Hello World!');
 #### With Viem
 
 ```typescript
-import { createSafe3Client } from '@safe3devs/safedeploy';
+import { createSafe3Client } from 'safe3devs-qr-deploy';
 
 const client = createSafe3Client({
   client: 'viem',
@@ -97,7 +149,7 @@ const contractAddress = await client.deployContract({
 ### 1. Install Plugin
 
 ```bash
-npm install @safe3devs/safedeploy
+npm install safe3devs-qr-deploy
 ```
 
 ### 2. Configure Hardhat
@@ -105,7 +157,7 @@ npm install @safe3devs/safedeploy
 Add to your `hardhat.config.ts`:
 
 ```typescript
-import '@safe3devs/safedeploy/plugins/safe3-deploy';
+import 'safe3devs-qr-deploy/plugins/safe3-deploy';
 
 const config: HardhatUserConfig = {
   // ... your config
@@ -280,6 +332,13 @@ Check the `scripts/` directory for complete examples:
 - `deploy.ts` - Hardhat integration example
 - `deploy-ethers.ts` - Ethers.js standalone example
 - `deploy-viem.ts` - Viem standalone example
+
+## 📚 Documentation
+
+- **[Smart Wallet Guide](SMART_WALLET_GUIDE.md)** - Complete smart wallet integration guide
+- **[Coinbase Smart Wallet](COINBASE_SMART_WALLET.md)** - Passkey/biometric authentication
+- **[Testing Guide](README_TESTING.md)** - Comprehensive testing documentation
+- **[CLI Examples](CLI_EXAMPLES.md)** - Command-line interface examples
 
 ## 🤝 Contributing
 
