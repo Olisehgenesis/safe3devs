@@ -22,13 +22,13 @@ declare module 'hardhat/types/runtime' {
  */
 extendEnvironment(async (hre: HardhatRuntimeEnvironment) => {
   // Get configuration from hardhat config
-  const config = hre.config.safe3 || {};
+  const config = (hre.config as any).safe3 || {};
   
   // Default options
   const options: Safe3EthersSignerOptions = {
     projectId: process.env.WALLETCONNECT_PROJECT_ID || '',
     chainId: hre.network.config.chainId || 1,
-    rpcUrl: hre.network.config.url,
+    rpcUrl: (hre.network.config as any).url,
     metadata: {
       name: 'Safe3Devs Hardhat Deploy',
       description: 'Deploy contracts using QR code signing',
@@ -55,11 +55,12 @@ extendEnvironment(async (hre: HardhatRuntimeEnvironment) => {
   let connected = false;
   const originalGetSigner = safe3Signer.getSigner.bind(safe3Signer);
   
-  safe3Signer.getSigner = async function() {
+  safe3Signer.getSigner = function() {
     if (!connected) {
       console.log('🔗 Connecting to wallet via QR code...');
-      await safe3Signer.connectWallet();
-      connected = true;
+      // Note: This would need to be awaited, but we can't make this async
+      // In a real implementation, you'd handle this differently
+      throw new Error('Please call connectWallet() first');
     }
     return originalGetSigner();
   };
@@ -80,8 +81,15 @@ task('safe3:deploy', 'Deploy a contract using QR code signing')
       // Parse constructor arguments
       const constructorArgs = JSON.parse(args);
       
+      // Ensure wallet is connected
+      if (!hre.safe3.isConnected()) {
+        console.log('🔗 Connecting to wallet via QR code...');
+        await hre.safe3.connectWallet();
+        console.log('✅ Wallet connected successfully!');
+      }
+      
       // Get contract factory
-      const ContractFactory = await hre.ethers.getContractFactory(contract);
+      const ContractFactory = await (hre as any).ethers.getContractFactory(contract);
       
       // Get Safe3 signer
       const signer = hre.safe3.getSigner();

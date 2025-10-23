@@ -1,6 +1,5 @@
 import { SignClient } from '@walletconnect/sign-client';
 import { SessionTypes } from '@walletconnect/types';
-import { generateChildLogger, getLogger } from '@walletconnect/logger';
 import * as qrcode from 'qrcode-terminal';
 import { EventEmitter } from 'events';
 
@@ -40,15 +39,13 @@ export declare interface Safe3QRDeploy {
 }
 
 export class Safe3QRDeploy extends EventEmitter {
-  private signClient: SignClient | null = null;
-  private session: SessionTypes.Struct | null = null;
+  protected signClient: any = null;
+  protected session: SessionTypes.Struct | null = null;
   private options: Safe3QRDeployOptions;
-  private logger: any;
 
   constructor(options: Safe3QRDeployOptions) {
     super();
     this.options = options;
-    this.logger = getLogger('Safe3QRDeploy');
   }
 
   /**
@@ -64,14 +61,13 @@ export class Safe3QRDeploy extends EventEmitter {
           url: 'https://safe3devs.com',
           icons: ['https://safe3devs.com/icon.png']
         },
-        relayUrl: this.options.relayUrl,
-        logger: this.options.logger ? generateChildLogger(this.logger, this.options.logger) : undefined
+        relayUrl: this.options.relayUrl
       });
 
       this.setupEventListeners();
-      this.logger.info('Safe3QRDeploy initialized successfully');
+      console.log('Safe3QRDeploy initialized successfully');
     } catch (error) {
-      this.logger.error('Failed to initialize Safe3QRDeploy:', error);
+      console.error('Failed to initialize Safe3QRDeploy:', error);
       this.emit('error', error as Error);
       throw error;
     }
@@ -109,12 +105,15 @@ export class Safe3QRDeploy extends EventEmitter {
       }
 
       this.session = await approval();
-      this.emit('connected', this.session);
-      this.logger.info('Wallet connected successfully');
-      
-      return this.session;
+      if (this.session) {
+        this.emit('connected', this.session);
+        console.log('Wallet connected successfully');
+        return this.session;
+      } else {
+        throw new Error('Failed to establish session');
+      }
     } catch (error) {
-      this.logger.error('Failed to connect wallet:', error);
+      console.error('Failed to connect wallet:', error);
       this.emit('error', error as Error);
       throw error;
     }
@@ -135,9 +134,9 @@ export class Safe3QRDeploy extends EventEmitter {
         });
         this.session = null;
         this.emit('disconnected');
-        this.logger.info('Wallet disconnected successfully');
+        console.log('Wallet disconnected successfully');
       } catch (error) {
-        this.logger.error('Failed to disconnect wallet:', error);
+        console.error('Failed to disconnect wallet:', error);
         this.emit('error', error as Error);
         throw error;
       }
@@ -198,7 +197,7 @@ export class Safe3QRDeploy extends EventEmitter {
 
       return result as string;
     } catch (error) {
-      this.logger.error('Failed to send transaction:', error);
+      console.error('Failed to send transaction:', error);
       this.emit('error', error as Error);
       throw error;
     }
@@ -224,7 +223,7 @@ export class Safe3QRDeploy extends EventEmitter {
 
       return result as string;
     } catch (error) {
-      this.logger.error('Failed to sign message:', error);
+      console.error('Failed to sign message:', error);
       this.emit('error', error as Error);
       throw error;
     }
@@ -247,21 +246,21 @@ export class Safe3QRDeploy extends EventEmitter {
   private setupEventListeners(): void {
     if (!this.signClient) return;
 
-    this.signClient.on('session_update', ({ topic, params }) => {
-      if (this.session && this.session.topic === topic) {
+    this.signClient.on('session_update', ({ topic, params }: any) => {
+      if (this.session && this.session.topic === topic && params) {
         this.session = params;
-        this.emit('session_updated', this.session);
+        this.emit('session_updated', this.session!);
       }
     });
 
-    this.signClient.on('session_delete', ({ topic }) => {
+    this.signClient.on('session_delete', ({ topic }: any) => {
       if (this.session && this.session.topic === topic) {
         this.session = null;
         this.emit('disconnected');
       }
     });
 
-    this.signClient.on('session_expire', ({ topic }) => {
+    this.signClient.on('session_expire', ({ topic }: any) => {
       if (this.session && this.session.topic === topic) {
         this.session = null;
         this.emit('session_expired');

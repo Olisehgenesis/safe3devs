@@ -84,7 +84,8 @@ export function getClientType(client: Safe3Client): ClientType {
 }
 
 // Re-export types and classes for convenience
-export { Safe3EthersSigner, Safe3ViemClient } from '../ethers';
+export { Safe3EthersSigner } from '../ethers';
+export { Safe3ViemClient } from '../viem';
 export { Safe3QRDeploy } from '../core';
 export type { Safe3Signer, Safe3QRDeployOptions } from '../core';
 export type { Safe3EthersSignerOptions } from '../ethers';
