@@ -1,6 +1,6 @@
 {
   "name": "safe3devs-qr-deploy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Universal Safe3Devs QR Deploy SDK with Coinbase Smart Wallet support. Deploy contracts using passkey/biometric authentication, ethers.js, viem, and WalletConnect QR signing.",
   "main": "dist/index.js",
