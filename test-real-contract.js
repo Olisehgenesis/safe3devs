@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { createSafe3Client } from './sdk/safedeploy/js/index.js';
+import { createSafe3Client } from './dist/index.esm.js';
 import * as dotenv from 'dotenv';
 
 // Load environment variables
